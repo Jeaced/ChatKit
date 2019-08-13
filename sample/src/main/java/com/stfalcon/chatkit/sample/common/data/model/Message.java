@@ -1,5 +1,6 @@
 package com.stfalcon.chatkit.sample.common.data.model;
 
+import com.stfalcon.chatkit.commons.models.DeliveryStatus;
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.commons.models.MessageContentType;
 
@@ -18,16 +19,22 @@ public class Message implements IMessage,
     private User user;
     private Image image;
     private Voice voice;
+    private DeliveryStatus status;
 
     public Message(String id, User user, String text) {
         this(id, user, text, new Date());
     }
 
     public Message(String id, User user, String text, Date createdAt) {
+        this(id, user, text, createdAt, DeliveryStatus.HIDDEN);
+    }
+
+    public Message(String id, User user, String text, Date createdAt, DeliveryStatus status) {
         this.id = id;
         this.text = text;
         this.user = user;
         this.createdAt = createdAt;
+        this.status = status;
     }
 
     @Override
@@ -43,6 +50,11 @@ public class Message implements IMessage,
     @Override
     public Date getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public DeliveryStatus getDeliveryStatus() {
+        return status;
     }
 
     @Override

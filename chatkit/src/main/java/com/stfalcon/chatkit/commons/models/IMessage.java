@@ -50,4 +50,12 @@ public interface IMessage {
      * @return the message creation date
      */
     Date getCreatedAt();
+
+    /**
+     * Returns message delivery status
+     *
+     * @return the message delivery status
+     */
+
+    DeliveryStatus getDeliveryStatus();
 }

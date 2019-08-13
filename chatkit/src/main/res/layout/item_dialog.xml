@@ -72,23 +72,22 @@
                 android:gravity="top"
                 android:maxLines="1"/>
 
-        </RelativeLayout>
+            <TextView
+                android:id="@id/dialogUnreadBubble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bubble_circle"
+                android:ellipsize="end"
+                android:fontFamily="@string/font_fontFamily_medium"
+                android:gravity="center"
+                android:lines="1"/>
 
-        <TextView
-            android:id="@id/dialogUnreadBubble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/dialogAvatar"
-            android:layout_alignRight="@id/dialogAvatar"
-            android:layout_alignTop="@id/dialogAvatar"
-            android:layout_marginEnd="-5dp"
-            android:layout_marginRight="-5dp"
-            android:layout_marginTop="-5dp"
-            android:background="@drawable/bubble_circle"
-            android:ellipsize="end"
-            android:fontFamily="@string/font_fontFamily_medium"
-            android:gravity="center"
-            android:lines="1"/>
+        </RelativeLayout>
 
         <FrameLayout
             android:id="@id/dialogDividerContainer"

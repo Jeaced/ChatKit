@@ -1,5 +1,6 @@
 package com.stfalcon.chatkit.messages;
 
+import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import com.stfalcon.chatkit.R;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.commons.ViewHolder;
+import com.stfalcon.chatkit.commons.models.DeliveryStatus;
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.commons.models.MessageContentType;
 import com.stfalcon.chatkit.utils.DateFormatter;
@@ -806,6 +808,7 @@ public class MessageHolders {
 
         protected ViewGroup bubble;
         protected TextView text;
+        protected ImageView status;
 
         @Deprecated
         public OutcomingTextMessageViewHolder(View itemView) {
@@ -827,6 +830,39 @@ public class MessageHolders {
 
             if (text != null) {
                 text.setText(message.getText());
+            }
+
+            if (status != null) {
+                switch (message.getDeliveryStatus()) {
+                    case HIDDEN: {
+                        status.setVisibility(View.GONE);
+                        break;
+                    }
+
+                    case ERROR: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_error);
+                        break;
+                    }
+
+                    case PROCESSING: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_loading);
+                        break;
+                    }
+
+                    case SENT: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_sent);
+                        break;
+                    }
+
+                    case READ: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_read);
+                        break;
+                    }
+                }
             }
         }
 
@@ -854,6 +890,7 @@ public class MessageHolders {
         private void init(View itemView) {
             bubble = (ViewGroup) itemView.findViewById(R.id.bubble);
             text = (TextView) itemView.findViewById(R.id.messageText);
+            status = (ImageView) itemView.findViewById(R.id.status);
         }
     }
 
@@ -935,6 +972,7 @@ public class MessageHolders {
 
         protected ImageView image;
         protected View imageOverlay;
+        protected ImageView status;
 
         @Deprecated
         public OutcomingImageMessageViewHolder(View itemView) {
@@ -956,6 +994,39 @@ public class MessageHolders {
 
             if (imageOverlay != null) {
                 imageOverlay.setSelected(isSelected());
+            }
+
+            if (status != null) {
+                switch (message.getDeliveryStatus()) {
+                    case HIDDEN: {
+                        status.setVisibility(View.GONE);
+                        break;
+                    }
+
+                    case ERROR: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_error);
+                        break;
+                    }
+
+                    case PROCESSING: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_loading);
+                        break;
+                    }
+
+                    case SENT: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_sent);
+                        break;
+                    }
+
+                    case READ: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_read);
+                        break;
+                    }
+                }
             }
         }
 
@@ -985,6 +1056,8 @@ public class MessageHolders {
         private void init(View itemView) {
             image = (ImageView) itemView.findViewById(R.id.image);
             imageOverlay = itemView.findViewById(R.id.imageOverlay);
+            status = itemView.findViewById(R.id.status);
+
 
             if (image instanceof RoundedImageView) {
                 ((RoundedImageView) image).setCorners(
