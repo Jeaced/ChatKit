@@ -44,8 +44,8 @@
             app:layout_alignSelf="center"
             app:layout_order="1"
             android:layout_toRightOf="@id/messageTime"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginStart="6dp"
             />
 
     </com.google.android.flexbox.FlexboxLayout>

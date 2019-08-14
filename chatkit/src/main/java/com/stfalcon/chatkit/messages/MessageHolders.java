@@ -1017,13 +1017,13 @@ public class MessageHolders {
 
                     case SENT: {
                         status.setVisibility(View.VISIBLE);
-                        status.setImageResource(R.drawable.ic_status_sent);
+                        status.setImageResource(R.drawable.ic_status_sent_grey);
                         break;
                     }
 
                     case READ: {
                         status.setVisibility(View.VISIBLE);
-                        status.setImageResource(R.drawable.ic_status_read);
+                        status.setImageResource(R.drawable.ic_status_read_grey);
                         break;
                     }
                 }
