@@ -557,6 +557,19 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         return -1;
     }
 
+    public MESSAGE getMessageById(String id) {
+        for (int i = 0; i < items.size(); i++) {
+            Wrapper wrapper = items.get(i);
+            if (wrapper.item instanceof IMessage) {
+                MESSAGE message = (MESSAGE) wrapper.item;
+                if (message.getId().contentEquals(id)) {
+                    return message;
+                }
+            }
+        }
+        return null;
+    }
+
     @SuppressWarnings("unchecked")
     private boolean isPreviousSameDate(int position, Date dateToCompare) {
         if (items.size() <= position) return false;
