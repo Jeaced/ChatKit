@@ -570,6 +570,22 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         return null;
     }
 
+    public List<MESSAGE> getAllMessagesBefore(String id) {
+        MESSAGE chosenMessage = getMessageById(id);
+        List<MESSAGE> messages = new ArrayList<>();
+        for (int i = 0; i < items.size(); i++) {
+            Wrapper wrapper = items.get(i);
+            if (wrapper.item instanceof IMessage) {
+                MESSAGE message = (MESSAGE) wrapper.item;
+                if (message.getCreatedAt().before(chosenMessage.getCreatedAt())) {
+                    messages.add(message);
+                }
+            }
+        }
+
+        return messages;
+    }
+
     @SuppressWarnings("unchecked")
     private boolean isPreviousSameDate(int position, Date dateToCompare) {
         if (items.size() <= position) return false;
