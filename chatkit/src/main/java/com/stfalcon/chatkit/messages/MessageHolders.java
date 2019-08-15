@@ -1132,9 +1132,9 @@ public class MessageHolders {
         }
 
         private void init(View itemView) {
-            image = new ImageView();
-            title = new TextView();
-            price = new TextView()
+            image = itemView.findViewById(R.id.image);
+            title = itemView.findViewById(R.id.productTitle);
+            price = itemView.findViewById(R.id.productPrice);
 
             if (image instanceof RoundedImageView) {
                 ((RoundedImageView) image).setCorners(
@@ -1436,7 +1436,7 @@ public class MessageHolders {
     }
 
     private static class DefaultOutcomingProductMessageViewHolder
-            extends OutcomingImageMessageViewHolder<MessageContentType.Product> {
+            extends OutcomingProductMessageViewHolder<MessageContentType.Product> {
 
         public DefaultOutcomingProductMessageViewHolder(View itemView) {
             super(itemView, null);
