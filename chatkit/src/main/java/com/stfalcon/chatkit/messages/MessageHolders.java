@@ -38,6 +38,7 @@ public class MessageHolders {
     private static final short VIEW_TYPE_DATE_HEADER = 130;
     private static final short VIEW_TYPE_TEXT_MESSAGE = 131;
     private static final short VIEW_TYPE_IMAGE_MESSAGE = 132;
+    private static final short VIEW_TYPE_PRODUCT_MESSAGE = 133;
 
     private Class<? extends ViewHolder<Date>> dateHeaderHolder;
     private int dateHeaderLayout;
@@ -46,6 +47,8 @@ public class MessageHolders {
     private HolderConfig<IMessage> outcomingTextConfig;
     private HolderConfig<MessageContentType.Image> incomingImageConfig;
     private HolderConfig<MessageContentType.Image> outcomingImageConfig;
+    private HolderConfig<MessageContentType.Product> incomingProductConfig;
+    private HolderConfig<MessageContentType.Product> outcomingProductConfig;
 
     private List<ContentTypeConfig> customContentTypes = new ArrayList<>();
     private ContentChecker contentChecker;
@@ -58,6 +61,8 @@ public class MessageHolders {
         this.outcomingTextConfig = new HolderConfig<>(DefaultOutcomingTextMessageViewHolder.class, R.layout.item_outcoming_text_message);
         this.incomingImageConfig = new HolderConfig<>(DefaultIncomingImageMessageViewHolder.class, R.layout.item_incoming_image_message);
         this.outcomingImageConfig = new HolderConfig<>(DefaultOutcomingImageMessageViewHolder.class, R.layout.item_outcoming_image_message);
+        this.incomingProductConfig = new HolderConfig<>(DefaultIncomingProductMessageViewHolder.class, R.layout.item_incoming_product_message);
+        this.outcomingProductConfig = new HolderConfig<>(DefaultOutcomingProductMessageViewHolder.class, R.layout.item_outcoming_image_message);
     }
 
     /**
@@ -551,6 +556,10 @@ public class MessageHolders {
                 return getHolder(parent, incomingImageConfig, messagesListStyle);
             case -VIEW_TYPE_IMAGE_MESSAGE:
                 return getHolder(parent, outcomingImageConfig, messagesListStyle);
+            case  VIEW_TYPE_PRODUCT_MESSAGE:
+                return getHolder(parent, incomingProductConfig, messagesListStyle);
+            case -VIEW_TYPE_PRODUCT_MESSAGE:
+                return  getHolder(parent, outcomingProductConfig, messagesListStyle);
             default:
                 for (ContentTypeConfig typeConfig : customContentTypes) {
                     if (Math.abs(typeConfig.type) == Math.abs(viewType)) {
@@ -650,6 +659,10 @@ public class MessageHolders {
             return VIEW_TYPE_IMAGE_MESSAGE;
         }
 
+        if (message instanceof MessageContentType.Product
+                && ((MessageContentType.Product) message).getImageUrl() != null) {
+            return VIEW_TYPE_PRODUCT_MESSAGE;
+        }
         // other default types will be here
 
         if (message instanceof MessageContentType) {
@@ -1070,6 +1083,173 @@ public class MessageHolders {
         }
     }
 
+    public static class IncomingProductMessageViewHolder<MESSAGE extends MessageContentType.Product>
+            extends BaseIncomingMessageViewHolder<MESSAGE> {
+
+        protected ImageView image;
+        protected TextView title;
+        protected TextView price;
+
+        @Deprecated
+        public IncomingProductMessageViewHolder(View itemView) {
+            super(itemView);
+            init(itemView);
+        }
+
+        public IncomingProductMessageViewHolder(View itemView, Object payload) {
+            super(itemView, payload);
+            init(itemView);
+        }
+
+        /**
+         * Override this method to have ability to pass custom data in ImageLoader for loading image(not avatar).
+         *
+         * @param message Message with image
+         */
+        protected Object getPayloadForImageLoader(MESSAGE message) {
+            return null;
+        }
+
+        @Override
+        public final void applyStyle(MessagesListStyle style) {
+            super.applyStyle(style);
+            if (time != null) {
+                time.setTextColor(style.getIncomingImageTimeTextColor());
+                time.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getIncomingImageTimeTextSize());
+                time.setTypeface(time.getTypeface(), style.getIncomingImageTimeTextStyle());
+            }
+
+        }
+
+        @Override
+        public void onBind(MESSAGE message) {
+            super.onBind(message);
+            if (image != null && imageLoader != null) {
+                imageLoader.loadImage(image, message.getImageUrl(), getPayloadForImageLoader(message));
+            }
+
+
+        }
+
+        private void init(View itemView) {
+            image = new ImageView();
+            title = new TextView();
+            price = new TextView()
+
+            if (image instanceof RoundedImageView) {
+                ((RoundedImageView) image).setCorners(
+                        R.dimen.message_bubble_corners_radius,
+                        R.dimen.message_bubble_corners_radius,
+                        R.dimen.message_bubble_corners_radius,
+                        0
+                );
+            }
+        }
+    }
+
+    public static class OutcomingProductMessageViewHolder<MESSAGE extends MessageContentType.Product>
+            extends BaseOutcomingMessageViewHolder<MESSAGE> {
+        protected ImageView image;
+        protected View imageOverlay;
+        protected ImageView status;
+
+        @Deprecated
+        public OutcomingProductMessageViewHolder(View itemView) {
+            super(itemView);
+            init(itemView);
+        }
+
+        public OutcomingProductMessageViewHolder(View itemView, Object payload) {
+            super(itemView, payload);
+            init(itemView);
+        }
+
+        @Override
+        public void onBind(MESSAGE message) {
+            super.onBind(message);
+            if (image != null && imageLoader != null) {
+                imageLoader.loadImage(image, message.getImageUrl(), getPayloadForImageLoader(message));
+            }
+
+            if (imageOverlay != null) {
+                imageOverlay.setSelected(isSelected());
+            }
+
+            if (status != null) {
+                switch (message.getDeliveryStatus()) {
+                    case HIDDEN: {
+                        status.setVisibility(View.GONE);
+                        break;
+                    }
+
+                    case ERROR: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_error);
+                        break;
+                    }
+
+                    case PROCESSING: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_loading);
+                        break;
+                    }
+
+                    case SENT: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_sent_grey);
+                        break;
+                    }
+
+                    case READ: {
+                        status.setVisibility(View.VISIBLE);
+                        status.setImageResource(R.drawable.ic_status_read_grey);
+                        break;
+                    }
+                }
+            }
+        }
+
+        @Override
+        public final void applyStyle(MessagesListStyle style) {
+            super.applyStyle(style);
+            if (time != null) {
+                time.setTextColor(style.getOutcomingImageTimeTextColor());
+                time.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getOutcomingImageTimeTextSize());
+                time.setTypeface(time.getTypeface(), style.getOutcomingImageTimeTextStyle());
+            }
+
+            if (imageOverlay != null) {
+                ViewCompat.setBackground(imageOverlay, style.getOutcomingImageOverlayDrawable());
+            }
+        }
+
+        /**
+         * Override this method to have ability to pass custom data in ImageLoader for loading image(not avatar).
+         *
+         * @param message Message with image
+         */
+        protected Object getPayloadForImageLoader(MESSAGE message) {
+            return null;
+        }
+
+        private void init(View itemView) {
+            image = (ImageView) itemView.findViewById(R.id.image);
+            imageOverlay = itemView.findViewById(R.id.imageOverlay);
+            status = itemView.findViewById(R.id.status);
+
+
+            if (image instanceof RoundedImageView) {
+                ((RoundedImageView) image).setCorners(
+                        R.dimen.message_bubble_corners_radius,
+                        R.dimen.message_bubble_corners_radius,
+                        0,
+                        R.dimen.message_bubble_corners_radius
+                );
+            }
+        }
+
+    }
+
     /**
      * Default view holder implementation for date header
      */
@@ -1243,6 +1423,22 @@ public class MessageHolders {
             extends OutcomingImageMessageViewHolder<MessageContentType.Image> {
 
         public DefaultOutcomingImageMessageViewHolder(View itemView) {
+            super(itemView, null);
+        }
+    }
+
+    private static class DefaultIncomingProductMessageViewHolder
+            extends IncomingProductMessageViewHolder<MessageContentType.Product> {
+
+        public DefaultIncomingProductMessageViewHolder(View itemView) {
+            super(itemView, null);
+        }
+    }
+
+    private static class DefaultOutcomingProductMessageViewHolder
+            extends OutcomingImageMessageViewHolder<MessageContentType.Product> {
+
+        public DefaultOutcomingProductMessageViewHolder(View itemView) {
             super(itemView, null);
         }
     }

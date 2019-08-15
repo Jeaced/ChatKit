@@ -37,6 +37,14 @@ public interface MessageContentType extends IMessage {
         String getImageUrl();
     }
 
+
+    interface Product extends Image {
+
+        String getTitle();
+
+        String getPrice();
+
+    }
     // other default types will be here
 
 }

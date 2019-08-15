@@ -7,6 +7,8 @@
     <item name="messageTime" type="id" />
     <item name="image" type="id" />
     <item name="imageOverlay" type="id" />
+    <item name="productTitle" type="id" />
+    <item name="productPrice" type="id" />
 
     <!-- MESSAGE INPUT -->
     <item name="attachmentButton" type="id" />
