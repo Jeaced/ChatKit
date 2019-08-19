@@ -62,7 +62,7 @@ public class MessageHolders {
         this.incomingImageConfig = new HolderConfig<>(DefaultIncomingImageMessageViewHolder.class, R.layout.item_incoming_image_message);
         this.outcomingImageConfig = new HolderConfig<>(DefaultOutcomingImageMessageViewHolder.class, R.layout.item_outcoming_image_message);
         this.incomingProductConfig = new HolderConfig<>(DefaultIncomingProductMessageViewHolder.class, R.layout.item_incoming_product_message);
-        this.outcomingProductConfig = new HolderConfig<>(DefaultOutcomingProductMessageViewHolder.class, R.layout.item_outcoming_image_message);
+        this.outcomingProductConfig = new HolderConfig<>(DefaultOutcomingProductMessageViewHolder.class, R.layout.item_outcoming_product_message);
     }
 
     /**
@@ -388,6 +388,11 @@ public class MessageHolders {
         return this;
     }
 
+    public MessageHolders setOutcomingProductLayout(@LayoutRes int layout) {
+        this.outcomingProductConfig.layout = layout;
+        return this;
+    }
+
     /**
      * Sets custom layout resource for outcoming image message.
      *
@@ -398,6 +403,12 @@ public class MessageHolders {
     public MessageHolders setOutcomingImageLayout(@LayoutRes int layout, Object payload) {
         this.outcomingImageConfig.layout = layout;
         this.outcomingImageConfig.payload = payload;
+        return this;
+    }
+
+    public MessageHolders setOutcomingProductLayout(@LayoutRes int layout, Object payload) {
+        this.outcomingProductConfig.layout = layout;
+        this.outcomingProductConfig.payload = payload;
         return this;
     }
 
@@ -1152,6 +1163,8 @@ public class MessageHolders {
         protected ImageView image;
         protected View imageOverlay;
         protected ImageView status;
+        protected TextView title;
+        protected TextView price;
 
         @Deprecated
         public OutcomingProductMessageViewHolder(View itemView) {
@@ -1173,6 +1186,14 @@ public class MessageHolders {
 
             if (imageOverlay != null) {
                 imageOverlay.setSelected(isSelected());
+            }
+
+            if (title != null) {
+                title.setText(message.getTitle());
+            }
+
+            if (price != null) {
+                title.setText(message.getPrice());
             }
 
             if (status != null) {
@@ -1236,6 +1257,8 @@ public class MessageHolders {
             image = (ImageView) itemView.findViewById(R.id.image);
             imageOverlay = itemView.findViewById(R.id.imageOverlay);
             status = itemView.findViewById(R.id.status);
+            title = itemView.findViewById(R.id.productTitle);
+            price = itemView.findViewById(R.id.productPrice);
 
 
             if (image instanceof RoundedImageView) {
