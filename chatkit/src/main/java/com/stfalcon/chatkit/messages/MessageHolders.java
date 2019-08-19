@@ -1139,6 +1139,13 @@ public class MessageHolders {
                 imageLoader.loadImage(image, message.getImageUrl(), getPayloadForImageLoader(message));
             }
 
+            if (title != null) {
+                title.setText(message.getTitle());
+            }
+
+            if (price != null) {
+                title.setText(message.getPrice());
+            }
 
         }
 
