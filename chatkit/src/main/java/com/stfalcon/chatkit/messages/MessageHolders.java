@@ -1172,6 +1172,7 @@ public class MessageHolders {
         protected ImageView status;
         protected TextView title;
         protected TextView price;
+        protected ViewGroup bubble;
 
         @Deprecated
         public OutcomingProductMessageViewHolder(View itemView) {
@@ -1187,6 +1188,10 @@ public class MessageHolders {
         @Override
         public void onBind(MESSAGE message) {
             super.onBind(message);
+            if (bubble != null) {
+                bubble.setSelected(isSelected());
+            }
+
             if (image != null && imageLoader != null) {
                 imageLoader.loadImage(image, message.getImageUrl(), getPayloadForImageLoader(message));
             }
@@ -1200,7 +1205,7 @@ public class MessageHolders {
             }
 
             if (price != null) {
-                title.setText(message.getPrice());
+                price.setText(message.getPrice());
             }
 
             if (status != null) {
@@ -1240,6 +1245,13 @@ public class MessageHolders {
         @Override
         public final void applyStyle(MessagesListStyle style) {
             super.applyStyle(style);
+//            if (bubble != null) {
+//                bubble.setPadding(style.getOutcomingDefaultBubblePaddingLeft(),
+//                        style.getOutcomingDefaultBubblePaddingTop(),
+//                        style.getOutcomingDefaultBubblePaddingRight(),
+//                        style.getOutcomingDefaultBubblePaddingBottom());
+//            }
+
             if (time != null) {
                 time.setTextColor(style.getOutcomingImageTimeTextColor());
                 time.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getOutcomingImageTimeTextSize());
@@ -1266,6 +1278,7 @@ public class MessageHolders {
             status = itemView.findViewById(R.id.status);
             title = itemView.findViewById(R.id.productTitle);
             price = itemView.findViewById(R.id.productPrice);
+            bubble = itemView.findViewById(R.id.bubble);
 
 
             if (image instanceof RoundedImageView) {
