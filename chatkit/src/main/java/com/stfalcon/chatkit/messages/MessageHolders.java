@@ -1100,6 +1100,7 @@ public class MessageHolders {
         protected ImageView image;
         protected TextView title;
         protected TextView price;
+        protected ViewGroup bubble;
 
         @Deprecated
         public IncomingProductMessageViewHolder(View itemView) {
@@ -1144,7 +1145,7 @@ public class MessageHolders {
             }
 
             if (price != null) {
-                title.setText(message.getPrice());
+                price.setText(message.getPrice());
             }
 
         }
@@ -1153,6 +1154,7 @@ public class MessageHolders {
             image = itemView.findViewById(R.id.image);
             title = itemView.findViewById(R.id.productTitle);
             price = itemView.findViewById(R.id.productPrice);
+            bubble = itemView.findViewById(R.id.bubble);
 
             if (image instanceof RoundedImageView) {
                 ((RoundedImageView) image).setCorners(
