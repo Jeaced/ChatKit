@@ -1,6 +1,5 @@
 package com.stfalcon.chatkit.messages;
 
-import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v4.view.ViewCompat;
@@ -18,7 +17,6 @@ import android.widget.TextView;
 import com.stfalcon.chatkit.R;
 import com.stfalcon.chatkit.commons.ImageLoader;
 import com.stfalcon.chatkit.commons.ViewHolder;
-import com.stfalcon.chatkit.commons.models.DeliveryStatus;
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.commons.models.MessageContentType;
 import com.stfalcon.chatkit.utils.DateFormatter;
@@ -1029,13 +1027,13 @@ public class MessageHolders {
 
                     case ERROR: {
                         status.setVisibility(View.VISIBLE);
-                        status.setImageResource(R.drawable.ic_status_error);
+                        status.setImageResource(R.drawable.ic_status_error_grey);
                         break;
                     }
 
                     case PROCESSING: {
                         status.setVisibility(View.VISIBLE);
-                        status.setImageResource(R.drawable.ic_status_loading);
+                        status.setImageResource(R.drawable.ic_status_loading_grey);
                         break;
                     }
 
@@ -1219,13 +1217,13 @@ public class MessageHolders {
 
                     case ERROR: {
                         status.setVisibility(View.VISIBLE);
-                        status.setImageResource(R.drawable.ic_status_error);
+                        status.setImageResource(R.drawable.ic_status_error_grey);
                         break;
                     }
 
                     case PROCESSING: {
                         status.setVisibility(View.VISIBLE);
-                        status.setImageResource(R.drawable.ic_status_loading);
+                        status.setImageResource(R.drawable.ic_status_loading_grey);
                         break;
                     }
 
