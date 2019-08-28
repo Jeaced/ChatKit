@@ -570,6 +570,20 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
         return null;
     }
 
+    public List<MESSAGE> getAllMessagesById(String id) {
+        ArrayList messages = new ArrayList<MESSAGE>();
+        for (int i = 0; i < items.size(); i++) {
+            Wrapper wrapper = items.get(i);
+            if (wrapper.item instanceof IMessage) {
+                MESSAGE message = (MESSAGE) wrapper.item;
+                if (message.getId().contentEquals(id)) {
+                     messages.add(message);
+                }
+            }
+        }
+        return messages;
+    }
+
     public List<MESSAGE> getAllMessagesBefore(String id) {
         MESSAGE chosenMessage = getMessageById(id);
         List<MESSAGE> messages = new ArrayList<>();
