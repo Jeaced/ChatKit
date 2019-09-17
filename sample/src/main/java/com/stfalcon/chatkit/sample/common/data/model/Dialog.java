@@ -63,6 +63,11 @@ public class Dialog implements IDialog<Message> {
         return unreadCount;
     }
 
+    @Override
+    public String getLastMessageHeader() {
+        return null;
+    }
+
     public void setUnreadCount(int unreadCount) {
         this.unreadCount = unreadCount;
     }

@@ -32,6 +32,8 @@ public interface IDialog<MESSAGE extends IMessage> {
 
     List<? extends IUser> getUsers();
 
+    String getLastMessageHeader();
+
     MESSAGE getLastMessage();
 
     void setLastMessage(MESSAGE message);

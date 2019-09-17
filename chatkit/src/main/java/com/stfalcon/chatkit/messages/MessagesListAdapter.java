@@ -36,6 +36,7 @@ import com.stfalcon.chatkit.commons.ViewHolder;
 import com.stfalcon.chatkit.commons.models.IMessage;
 import com.stfalcon.chatkit.utils.DateFormatter;
 
+import java.sql.Wrapper;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -237,6 +238,27 @@ public class MessagesListAdapter<MESSAGE extends IMessage>
     public void upsert(MESSAGE message) {
         if (!update(message)) {
             addToStart(message, false);
+        }
+    }
+
+
+    /**
+     * Does not work properly
+     */
+    public void upsertInRightPlace(MESSAGE newMessage) {
+        if (!update(newMessage) && items != null) {
+            for(int i = 0; i < items.size(); i++) {
+                Wrapper wrapper = items.get(i);
+                if (wrapper.item instanceof IMessage) {
+                    MESSAGE message = (MESSAGE) wrapper.item;
+                    if (newMessage.getCreatedAt().after(message.getCreatedAt())) {
+                        Wrapper<MESSAGE> element = new Wrapper<>(newMessage);
+                        items.add(i, element);
+                        notifyItemInserted(i);
+                        return;
+                    }
+                }
+            }
         }
     }
 

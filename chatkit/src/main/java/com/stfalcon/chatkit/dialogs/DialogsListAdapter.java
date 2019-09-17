@@ -516,6 +516,7 @@ public class DialogsListAdapter<DIALOG extends IDialog>
         protected ViewGroup root;
         protected TextView tvName;
         protected TextView tvDate;
+        protected TextView tvLastMessageHeader;
         protected ImageView ivAvatar;
         protected ImageView ivLastMessageUser;
         protected TextView tvLastMessage;
@@ -530,6 +531,7 @@ public class DialogsListAdapter<DIALOG extends IDialog>
             tvName = (TextView) itemView.findViewById(R.id.dialogName);
             tvDate = (TextView) itemView.findViewById(R.id.dialogDate);
             tvLastMessage = (TextView) itemView.findViewById(R.id.dialogLastMessage);
+            tvLastMessageHeader = (TextView) itemView.findViewById(R.id.dialogMessageHeader);
             tvBubble = (TextView) itemView.findViewById(R.id.dialogUnreadBubble);
             ivLastMessageUser = (ImageView) itemView.findViewById(R.id.dialogLastMessageUserAvatar);
             ivAvatar = (ImageView) itemView.findViewById(R.id.dialogAvatar);
@@ -546,7 +548,11 @@ public class DialogsListAdapter<DIALOG extends IDialog>
                 }
 
                 if (tvLastMessage != null) {
-                    tvLastMessage.setTextSize(TypedValue.COMPLEX_UNIT_PX, dialogStyle.getDialogMessageTextSize());
+                    tvLastMessage.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);//(TypedValue.COMPLEX_UNIT_PX, dialogStyle.getDialogMessageTextSize());
+                }
+
+                if (tvLastMessageHeader != null) {
+                    tvLastMessageHeader.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 12);
                 }
 
                 if (tvDate != null) {
@@ -653,6 +659,20 @@ public class DialogsListAdapter<DIALOG extends IDialog>
                         : formattedDate);
             } else {
                 tvDate.setText(null);
+            }
+
+            if (dialog.getLastMessageHeader() != null) {
+                tvLastMessageHeader.setVisibility(VISIBLE);
+                tvLastMessageHeader.setText(dialog.getLastMessageHeader());
+                if (tvLastMessage != null) {
+                    tvLastMessage.setMaxLines(1);
+                }
+            } else {
+                tvLastMessageHeader.setVisibility(GONE);
+                tvLastMessageHeader.setText("");
+                if (tvLastMessage != null) {
+                    tvLastMessage.setMaxLines(2);
+                }
             }
 
             //Set Dialog avatar
