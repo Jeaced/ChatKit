@@ -48,6 +48,10 @@ public interface MessageContentType extends IMessage {
         String getImageUrl();
 
     }
+
+    interface Notification extends IMessage {
+        String getText();
+    }
     // other default types will be here
 
 }

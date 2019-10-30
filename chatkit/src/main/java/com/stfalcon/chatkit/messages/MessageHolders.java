@@ -37,6 +37,7 @@ public class MessageHolders {
     private static final short VIEW_TYPE_TEXT_MESSAGE = 131;
     private static final short VIEW_TYPE_IMAGE_MESSAGE = 132;
     private static final short VIEW_TYPE_PRODUCT_MESSAGE = 133;
+    private static final short VIEW_TYPE_NOTIFICATION_MESSAGE = 134;
 
     private Class<? extends ViewHolder<Date>> dateHeaderHolder;
     private int dateHeaderLayout;
@@ -47,6 +48,8 @@ public class MessageHolders {
     private HolderConfig<MessageContentType.Image> outcomingImageConfig;
     private HolderConfig<MessageContentType.Product> incomingProductConfig;
     private HolderConfig<MessageContentType.Product> outcomingProductConfig;
+    private HolderConfig<IMessage> incomingNotificationConfig;
+    private HolderConfig<IMessage> outcomingNotificationConfig;
 
     private List<ContentTypeConfig> customContentTypes = new ArrayList<>();
     private ContentChecker contentChecker;
@@ -61,6 +64,10 @@ public class MessageHolders {
         this.outcomingImageConfig = new HolderConfig<>(DefaultOutcomingImageMessageViewHolder.class, R.layout.item_outcoming_image_message);
         this.incomingProductConfig = new HolderConfig<>(DefaultIncomingProductMessageViewHolder.class, R.layout.item_incoming_product_message);
         this.outcomingProductConfig = new HolderConfig<>(DefaultOutcomingProductMessageViewHolder.class, R.layout.item_outcoming_product_message);
+        this.incomingNotificationConfig = new HolderConfig<>(DefaultIncomingNotificationMessageViewHolder.class, R.layout.item_notification_message);
+        this.outcomingNotificationConfig = new HolderConfig<>(DefaultIncomingNotificationMessageViewHolder.class, R.layout.item_notification_message);
+
+
     }
 
     /**
@@ -569,6 +576,10 @@ public class MessageHolders {
                 return getHolder(parent, incomingProductConfig, messagesListStyle);
             case -VIEW_TYPE_PRODUCT_MESSAGE:
                 return  getHolder(parent, outcomingProductConfig, messagesListStyle);
+            case  VIEW_TYPE_NOTIFICATION_MESSAGE:
+                return getHolder(parent, incomingNotificationConfig, messagesListStyle);
+            case -VIEW_TYPE_NOTIFICATION_MESSAGE:
+                return  getHolder(parent, outcomingNotificationConfig, messagesListStyle);
             default:
                 for (ContentTypeConfig typeConfig : customContentTypes) {
                     if (Math.abs(typeConfig.type) == Math.abs(viewType)) {
@@ -671,6 +682,11 @@ public class MessageHolders {
         if (message instanceof MessageContentType.Product
                 && ((MessageContentType.Product) message).getImageUrl() != null) {
             return VIEW_TYPE_PRODUCT_MESSAGE;
+        }
+
+        if (message instanceof MessageContentType.Notification
+                && message.getText() != null) {
+            return VIEW_TYPE_NOTIFICATION_MESSAGE;
         }
         // other default types will be here
 
@@ -818,6 +834,52 @@ public class MessageHolders {
 
         private void init(View itemView) {
             bubble = (ViewGroup) itemView.findViewById(R.id.bubble);
+            text = (TextView) itemView.findViewById(R.id.messageText);
+        }
+    }
+
+    /**
+     * Default view holder implementation for incoming notification message
+     */
+    public static class IncomingNotificationMessageViewHolder<MESSAGE extends IMessage>
+            extends BaseIncomingMessageViewHolder<MESSAGE> {
+
+        protected TextView text;
+
+        @Deprecated
+        public IncomingNotificationMessageViewHolder(View itemView) {
+            super(itemView);
+            init(itemView);
+        }
+
+        public IncomingNotificationMessageViewHolder(View itemView, Object payload) {
+            super(itemView, payload);
+            init(itemView);
+        }
+
+        @Override
+        public void onBind(MESSAGE message) {
+            super.onBind(message);
+
+            if (text != null) {
+                text.setText(message.getText());
+            }
+        }
+
+        @Override
+        public void applyStyle(MessagesListStyle style) {
+            super.applyStyle(style);
+
+            if (text != null) {
+                text.setTextSize(TypedValue.COMPLEX_UNIT_PX, style.getIncomingTextSize());
+                text.setTypeface(text.getTypeface(), style.getIncomingTextStyle());
+                text.setAutoLinkMask(style.getTextAutoLinkMask());
+                text.setLinkTextColor(style.getIncomingTextLinkColor());
+                configureLinksBehavior(text);
+            }
+        }
+
+        private void init(View itemView) {
             text = (TextView) itemView.findViewById(R.id.messageText);
         }
     }
@@ -1450,6 +1512,14 @@ public class MessageHolders {
             extends OutcomingTextMessageViewHolder<IMessage> {
 
         public DefaultOutcomingTextMessageViewHolder(View itemView) {
+            super(itemView, null);
+        }
+    }
+
+    private static class DefaultIncomingNotificationMessageViewHolder
+            extends IncomingNotificationMessageViewHolder<IMessage> {
+
+        public DefaultIncomingNotificationMessageViewHolder(View itemView) {
             super(itemView, null);
         }
     }
